@@ -25,8 +25,7 @@ class OrdersController < ApplicationController
   end
 
   def total
-    total = order.order_lines.sum { |order_line| order_line.product.price_cents * order_line.quantity }
-    render json: { total: total }
+    render json: { total: order.total }
   end
 
   def show
