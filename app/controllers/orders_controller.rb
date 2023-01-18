@@ -2,7 +2,7 @@ class OrdersController < ApplicationController
   def create
     @order = Order.new(order_params)
     if @order.save
-      render json: { order: order }
+      render json: { order: OrderSerializer.new(order) }, status: :created
     else
       render json: { errors: order.errors.full_messages }, status: 422
     end
@@ -11,15 +11,18 @@ class OrdersController < ApplicationController
   def update
 
     if order.update(order_params)
-      render json: { order: order }
+      render json: { order: OrderSerializer.new(order) }
     else
       render json: { errors: order.errors.full_messages }, status: 422
     end
   end
 
   def destroy
-    order.destroy
-    render json: { message: 'Order deleted' }
+    if order.destroy
+      render json: { message: 'Order deleted' }
+    else
+      render json: { errors: order.errors.full_messages }, status: 422
+    end
   end
 
   private

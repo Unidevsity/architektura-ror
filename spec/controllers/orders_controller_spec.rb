@@ -1,5 +1,3 @@
-# test for crud in orders controller
-
 describe OrdersController do
   let(:product) { create(:product) }
   let(:order_lines) do
