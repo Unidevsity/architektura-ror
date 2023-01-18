@@ -2,18 +2,14 @@ module Orders
   class OrderLinesController < ApplicationController
 
     def create
-      product = Product.find_by(id: order_line_params[:product_id])
-      if product.nil?
-        render json: { message: "Could not find Product with id = #{order_line_params[:product_id]}" }, status: :not_found
-        return
-      end
-
-      order_line = order.order_lines.new(order_line_params)
-      if order_line.save
+      order_line = OrderLine.create_from_params(order, order_line_params)
+      if order_line
         render json: { order_line: OrderLineSerializer.new(order_line) }, status: :created
       else
         render json: order_line.errors, status: :unprocessable_entity
       end
+    rescue OrderLine::ProductNotFound => e
+      render json: { message: e.message }, status: :not_found
     end
 
     def update

@@ -27,4 +27,6 @@ class Order < ApplicationRecord
   def total
     order_lines.sum { |order_line| order_line.product.price_cents * order_line.quantity }
   end
+
+
 end

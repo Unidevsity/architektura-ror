@@ -19,4 +19,15 @@
 class OrderLine < ApplicationRecord
   belongs_to :order, inverse_of: :order_lines
   belongs_to :product
+
+  class ProductNotFound < StandardError; end
+
+  def self.create_from_params(order, order_line_params)
+    product = Product.find_by(id: order_line_params[:product_id])
+    if product.nil?
+      raise ProductNotFound, "Could not find Product with id = #{order_line_params[:product_id]}"
+    end
+
+    order.order_lines.create!(order_line_params)
+  end
 end
