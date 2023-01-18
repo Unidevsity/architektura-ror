@@ -9,8 +9,17 @@ class OrdersController < ApplicationController
   end
 
   def update
+    order_lines = order_params[:order_lines_attributes]
+    order_lines.each do |order_line|
+      if order.order_lines.find_by(product_id: order_line[:product_id])
+        order_line[:quantity] = order_line[:quantity].to_i + order.order_lines.find_by(product_id: order_line[:product_id]).quantity
+        order.order_lines.find_by(product_id: order_line[:product_id]).build(quantity: order_line[:quantity])
+      else
+        order.order_lines.build(order_line)
+      end
+    end
 
-    if order.update(order_params)
+    if order.save
       render json: { order: OrderSerializer.new(order) }
     else
       render json: { errors: order.errors.full_messages }, status: 422
