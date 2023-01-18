@@ -30,4 +30,14 @@ class OrderLine < ApplicationRecord
 
     order.order_lines.create!(order_line_params)
   end
+
+  def update_quantity(quantity_to_update)
+    self.quantity = quantity + quantity_to_update
+    if quantity <= 0
+      destroy
+    else
+      save!
+    end
+  end
+
 end

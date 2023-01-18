@@ -14,16 +14,10 @@ module Orders
 
     def update
       quantity_to_update = order_line_params[:quantity].to_i
-      order_line.quantity = order_line.quantity + quantity_to_update
-
-      if order_line.quantity > 0
-        if order_line.save
-          render json: { order_line: OrderLineSerializer.new(order_line) }, status: :ok
-        else
-          render json: order_line.errors, status: :unprocessable_entity
-        end
+      if order_line.update_quantity(quantity_to_update)
+        render json: { order_line: OrderLineSerializer.new(order_line) }, status: :ok
       else
-        destroy
+        render json: order_line.errors, status: :unprocessable_entity
       end
     end
 

@@ -32,6 +32,22 @@ class OrdersController < ApplicationController
     render json: { order: OrderSerializer.new(order) }
   end
 
+  def add_product
+    if order.add_product(params[:product_id])
+      render json: { order: OrderSerializer.new(order) }
+    else
+      render json: { errors: order.errors.full_messages }, status: 422
+    end
+  end
+
+  def remove_product
+    if order.remove_product(params[:product_id])
+      render json: { order: OrderSerializer.new(order) }
+    else
+      render json: { errors: order.errors.full_messages }, status: 422
+    end
+  end
+
   private
 
   def order_params
