@@ -44,12 +44,13 @@ group :development, :test do
   gem 'database_cleaner-active_record'
   gem 'rails-controller-testing'
   gem 'shoulda-matchers'
+  gem 'faker'
+
 end
 
 group :development do
   # Speed up commands on slow machines / big apps [https://github.com/rails/spring]
   # gem "spring"
   gem 'annotate'
-  gem 'faker'
 end
 
