@@ -35,4 +35,46 @@ describe OrdersController do
 
   end
 
+  describe 'GET #total' do
+    let!(:order) { create(:order) }
+    let(:quantity) { 2 }
+    let(:product1) { create(:product, price_cents: 1000) }
+    let(:product2) { create(:product, price_cents: 2000) }
+    let!(:order_lines) do
+      [
+        create(:order_line, product_id: product1.id, quantity: quantity, order: order),
+        create(:order_line, product_id: product2.id, quantity: quantity, order: order)
+      ]
+    end
+
+    it 'returns the total of an order' do
+      get :total, params: { id: order.id }
+      expect(response).to have_http_status(:ok)
+      json = JSON.parse(response.body)
+      expect(json['total']).to eq quantity * product1.price_cents + quantity * product2.price_cents
+    end
+  end
+
+  describe 'GET #show' do
+    let!(:order) { create(:order) }
+    let(:quantity) { 2 }
+    let(:product1) { create(:product, price_cents: 1000) }
+    let(:product2) { create(:product, price_cents: 2000) }
+    let!(:order_lines) do
+      [
+        create(:order_line, product_id: product1.id, quantity: quantity, order: order),
+        create(:order_line, product_id: product2.id, quantity: quantity, order: order)
+      ]
+    end
+
+    it 'returns the total of an order' do
+      get :show, params: { id: order.id }
+      expect(response).to have_http_status(:ok)
+      json = JSON.parse(response.body)
+      expect(json['order']['order_lines'].count).to eq 2
+      expect(json['order']['order_lines_count']).to eq 2
+      expect(json['order']['total']).to eq quantity * product1.price_cents + quantity * product2.price_cents
+    end
+  end
+
 end
