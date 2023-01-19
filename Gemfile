@@ -55,3 +55,5 @@ group :development do
   gem 'annotate'
 end
 
+
+gem "simple_command", "~> 1.0"
