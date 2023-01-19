@@ -8,6 +8,7 @@
 #  updated_at :datetime         not null
 #
 class Order < ApplicationRecord
+  include PriceConversion
   has_many :order_lines, dependent: :destroy, inverse_of: :order, autosave: true
 
   accepts_nested_attributes_for :order_lines, reject_if: :all_blank, allow_destroy: true
@@ -24,7 +25,15 @@ class Order < ApplicationRecord
     save!
   end
 
-  def total
+  def total_in_full_number
+    in_full_number(total_cents)
+  end
+
+  def total_in_currency(currency = 'USD')
+    in_currency(total_cents, currency)
+  end
+
+  def total_cents
     order_lines.sum { |order_line| order_line.product.price_cents * order_line.quantity }
   end
 
