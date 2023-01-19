@@ -1,7 +1,7 @@
 class OrdersController < ApplicationController
   def create
-    @order = Order.new(order_params)
-    if @order.save
+    order = OrdersService.new.create_order(order_params)
+    if order.persisted?
       render json: { order: OrderSerializer.new(order) }, status: :created
     else
       render json: { errors: order.errors.full_messages }, status: 422
@@ -9,7 +9,8 @@ class OrdersController < ApplicationController
   end
 
   def update
-    if order.update_lines(order_params[:order_lines_attributes])
+    order = OrdersService.new.update_order(params[:id], order_params)
+    if order.persisted?
       render json: { order: OrderSerializer.new(order) }
     else
       render json: { errors: order.errors.full_messages }, status: 422
@@ -17,7 +18,8 @@ class OrdersController < ApplicationController
   end
 
   def destroy
-    if order.destroy
+    order = OrdersService.new.destroy_order(params[:id])
+    if order.destroyed?
       render json: { message: 'Order deleted' }
     else
       render json: { errors: order.errors.full_messages }, status: 422
@@ -25,15 +27,18 @@ class OrdersController < ApplicationController
   end
 
   def total
-    render json: { total: order.total }
+    render json: { total: OrdersService.new.get_total(params[:id]) }
   end
 
   def show
-    render json: { order: OrderSerializer.new(order) }
+    render json: { order: OrderSerializer.new(
+      OrdersService.new.get_order(params[:id])
+    ) }
   end
 
   def add_product
-    if order.add_product(params[:product_id])
+    order = OrdersService.new.add_product(params[:id], params[:product_id])
+    if order.persisted?
       render json: { order: OrderSerializer.new(order) }
     else
       render json: { errors: order.errors.full_messages }, status: 422
@@ -41,7 +46,8 @@ class OrdersController < ApplicationController
   end
 
   def remove_product
-    if order.remove_product(params[:product_id])
+    order = OrdersService.new.remove_product(params[:id], params[:product_id])
+    if order.persisted?
       render json: { order: OrderSerializer.new(order) }
     else
       render json: { errors: order.errors.full_messages }, status: 422
@@ -54,7 +60,4 @@ class OrdersController < ApplicationController
     params.require(:order).permit(:user_id, order_lines_attributes: [:product_id, :quantity])
   end
 
-  def order
-    @order ||= Order.find(params[:id])
-  end
 end

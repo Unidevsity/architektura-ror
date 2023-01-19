@@ -37,6 +37,10 @@ class Order < ApplicationRecord
     order_lines.sum { |order_line| order_line.product.price_cents * order_line.quantity }
   end
 
+  def total
+    total_cents
+  end
+
   def add_product(product_id)
     order_line = order_lines.find_or_initialize_by(product_id: product_id)
     order_line.increment!(:quantity)
