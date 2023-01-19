@@ -122,7 +122,7 @@ describe OrdersController do
     context 'when order cannot be closed' do
 
       it 'does not close the order' do
-        expect(Orders::CanBeClosed).to receive(:apply).and_return(false)
+        expect(Orders::CanBeClosed).to receive(:apply?).and_return(false)
         expect { subject }.not_to change { order.reload.status }
       end
 

@@ -47,6 +47,9 @@ class OrdersController < ApplicationController
 
   def remove_product
     order = Orders::RemoveProductFromOrder.new(params[:id], params[:product_id]).call
+    if order.status == 'completed' && order.total > 100 && order.order_lines.first.product.price > 100
+      order.update(status: 'closed')
+    end
     if order.persisted?
       render json: { order: OrderSerializer.new(order) }
     else
@@ -62,9 +65,9 @@ class OrdersController < ApplicationController
   end
 
   def close
-    # if order.status == 'completed' && order.total > 100 && order.order_lines.first.product.price > 100
     order = Order.find(params[:id])
-    # if OrderPolicy.can_be_closed?(order)
+    # if order.status == 'completed' && order.total > 100 && order.order_lines.first.product.price > 100
+    # if OrderPolicy.new.can_be_closed?(order)
     if Orders::CanBeClosed.apply?(order)
       order.update(status: 'closed')
     end
