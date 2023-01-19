@@ -5,6 +5,7 @@ Rails.application.routes.draw do
       get :total
       post :add_product
       post :remove_product
+      post :close
     end
   end
 

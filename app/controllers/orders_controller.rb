@@ -61,6 +61,12 @@ class OrdersController < ApplicationController
     head :ok
   end
 
+  def close
+    if order.status == 'completed' && order.total > 100 && order.order_lines.first.product.price > 100
+      order.update(status: 'closed')
+    end
+  end
+
   private
 
   def order_params
