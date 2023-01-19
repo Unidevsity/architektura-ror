@@ -12,5 +12,8 @@
 class Product < ApplicationRecord
   class ProductAlreadyExists < StandardError; end
 
-  validates :name, uniqueness: true
+  validates :name, presence: true, uniqueness: true
+  validates :description, presence: true, length: { maximum: 1000 }
+  validates :price_cents, presence: true, numericality: { greater_than: 0 }
+
 end

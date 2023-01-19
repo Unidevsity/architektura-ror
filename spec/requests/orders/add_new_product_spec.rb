@@ -15,7 +15,15 @@ describe 'Add new product', type: :request do
     it 'returns an error' do
       post '/products', params: { product: { name: 'Product 1', description: 'Description 1', price_cents: 1000 } }
       expect(response).to have_http_status(:unprocessable_entity)
-      expect(response.body).to include('has already been taken')
+      expect(response.body).to include('Name has already been taken')
+    end
+  end
+
+  context 'when product description has vulgarisms' do
+    it 'returns an error' do
+      post '/products', params: { product: { name: 'Product 1', description: 'Description 1 dupa', price_cents: 1000 } }
+      expect(response).to have_http_status(:unprocessable_entity)
+      expect(response.body).to include('Description contains vulgarisms')
     end
   end
 
