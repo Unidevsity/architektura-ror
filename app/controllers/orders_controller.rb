@@ -1,10 +1,10 @@
 class OrdersController < ApplicationController
   def create
-    order = OrdersService.new.create_order(order_params)
-    if order.persisted?
-      render json: { order: OrderSerializer.new(order) }, status: :created
+    command = Orders::CreateOrder.call(order_params)
+    if command.success?
+      render json: { order: OrderSerializer.new(command.result) }, status: :created
     else
-      render json: { errors: order.errors.full_messages }, status: 422
+      render json: { message: command.errors.full_messages.first }, status: 422
     end
   end
 

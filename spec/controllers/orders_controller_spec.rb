@@ -30,7 +30,7 @@ describe OrdersController do
     end
 
     it 'calls OrdersService' do
-      expect(orders_service).to receive(:create_order).and_call_original
+      expect(Orders::CreateOrder).to receive(:call).and_call_original
       create_request
     end
   end
