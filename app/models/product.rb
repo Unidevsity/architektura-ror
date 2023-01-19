@@ -10,5 +10,7 @@
 #  updated_at  :datetime         not null
 #
 class Product < ApplicationRecord
+  class ProductAlreadyExists < StandardError; end
 
+  validates :name, uniqueness: true
 end

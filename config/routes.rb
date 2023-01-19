@@ -7,4 +7,6 @@ Rails.application.routes.draw do
       post :remove_product
     end
   end
+
+  resources :products, only: %i[create]
 end
