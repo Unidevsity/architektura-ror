@@ -107,6 +107,26 @@ describe OrdersController do
     # case 6
     # case 7
     # case.........
+
+    let(:order) { create(:order) }
+
+    subject { post :close, params: { id: order.id } }
+
+    context 'when order can be closed' do
+      it 'closes the order' do
+        expect(Orders::CanBeClosed).to receive(:apply?).and_return(true)
+        expect { subject }.to change { order.reload.status }.to('closed')
+      end
+    end
+
+    context 'when order cannot be closed' do
+
+      it 'does not close the order' do
+        expect(Orders::CanBeClosed).to receive(:apply).and_return(false)
+        expect { subject }.not_to change { order.reload.status }
+      end
+
+    end
   end
 
 end

@@ -62,7 +62,10 @@ class OrdersController < ApplicationController
   end
 
   def close
-    if order.status == 'completed' && order.total > 100 && order.order_lines.first.product.price > 100
+    # if order.status == 'completed' && order.total > 100 && order.order_lines.first.product.price > 100
+    order = Order.find(params[:id])
+    # if OrderPolicy.can_be_closed?(order)
+    if Orders::CanBeClosed.apply?(order)
       order.update(status: 'closed')
     end
   end
