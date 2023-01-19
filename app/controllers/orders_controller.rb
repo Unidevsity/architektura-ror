@@ -55,7 +55,8 @@ class OrdersController < ApplicationController
   end
 
   def export
-    Orders::ExportOrder.new(params[:id], params[:format], params[:notify_by]).call
+    Orders::ExportOrder.new(params[:id], params[:format]).call
+    Orders::Notify.new(params[:id], params[:notify_by]).call
     head :ok
   end
 
