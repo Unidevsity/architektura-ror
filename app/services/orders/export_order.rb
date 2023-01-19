@@ -15,6 +15,10 @@ module Orders
         export_order_to_pdf
       when 'html'
         export_order_to_html
+      when 'markdown'
+        export_order_to_markdown
+      when 'wookie'
+        export_order_to_wookie
       end
     end
   end
@@ -33,6 +37,14 @@ module Orders
 
   def export_order_to_html
     @export = OpenStruct(name: 'HTML export')
+  end
+
+  def export_order_to_markdown
+    @export = OpenStruct(name: 'Markdown export')
+  end
+
+  def export_order_to_wookie
+    @export = OpenStruct(name: 'Wookie export')
   end
 
 
