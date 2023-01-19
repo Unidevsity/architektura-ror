@@ -10,15 +10,15 @@ module Orders
     def call
       case @format
       when 'csv'
-        export_order_to_csv
+        Exporters::CsvExporter.call
       when 'pdf'
-        export_order_to_pdf
+        Exporters::PdfExporter.call
       when 'html'
-        export_order_to_html
+        Exporters::HtmlExporter.call
       when 'markdown'
-        export_order_to_markdown
+        Exporters::MarkdownExporter.call
       when 'wookie'
-        export_order_to_wookie
+        Exporters::WookieExporter.call
       end
     end
   end
@@ -26,26 +26,5 @@ module Orders
   private
 
   attr_reader :order_id, :format, :export
-
-  def export_order_to_csv
-    @export = OpenStruct(name: 'CSV export')
-  end
-
-  def export_order_to_pdf
-    @export = OpenStruct(name: 'PDF export')
-  end
-
-  def export_order_to_html
-    @export = OpenStruct(name: 'HTML export')
-  end
-
-  def export_order_to_markdown
-    @export = OpenStruct(name: 'Markdown export')
-  end
-
-  def export_order_to_wookie
-    @export = OpenStruct(name: 'Wookie export')
-  end
-
 
 end
