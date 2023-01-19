@@ -5,6 +5,7 @@
 # Table name: order_lines
 #
 #  id         :integer          not null, primary key
+#  line_total :integer
 #  quantity   :integer
 #  created_at :datetime         not null
 #  updated_at :datetime         not null

@@ -1,4 +1,16 @@
 # frozen_string_literal: true
+
+# == Schema Information
+#
+# Table name: products
+#
+#  id          :integer          not null, primary key
+#  description :string
+#  name        :string
+#  price_cents :integer
+#  created_at  :datetime         not null
+#  updated_at  :datetime         not null
+#
 describe Product, type: :model do
   describe '#price_in_full_number' do
     it 'returns the price in full number' do
