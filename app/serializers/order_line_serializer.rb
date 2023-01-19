@@ -3,7 +3,7 @@
 # Table name: order_lines
 #
 #  id         :integer          not null, primary key
-#  line_total :integer
+#  line_total :integer          default(0)
 #  quantity   :integer
 #  created_at :datetime         not null
 #  updated_at :datetime         not null

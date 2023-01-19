@@ -44,6 +44,7 @@ class Order < ApplicationRecord
   def add_product(product_id)
     order_line = order_lines.find_or_initialize_by(product_id: product_id)
     order_line.increment!(:quantity)
+    order_line.update_line_total
     order_line.save!
   end
 
@@ -52,6 +53,8 @@ class Order < ApplicationRecord
     order_line.quantity -= 1
     if order_line.quantity <= 0
       order_line.destroy
+    else
+      order_line.update_line_total
     end
     save!
   end
