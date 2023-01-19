@@ -40,4 +40,8 @@ class OrderLine < ApplicationRecord
     end
   end
 
+  def line_total
+    product.price_cents * quantity
+  end
+
 end
