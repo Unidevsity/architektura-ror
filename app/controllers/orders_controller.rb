@@ -32,7 +32,7 @@ class OrdersController < ApplicationController
 
   def show
     render json: { order: OrderSerializer.new(
-      OrdersService.new.get_order(params[:id])
+      Orders::GetOrder.new(params[:id]).call
     ) }
   end
 
@@ -46,7 +46,7 @@ class OrdersController < ApplicationController
   end
 
   def remove_product
-    order = OrdersService.new.remove_product(params[:id], params[:product_id])
+    order = Orders::RemoveProductFromOrder.new(params[:id], params[:product_id]).call
     if order.persisted?
       render json: { order: OrderSerializer.new(order) }
     else
