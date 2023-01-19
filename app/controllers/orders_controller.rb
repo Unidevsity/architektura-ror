@@ -55,18 +55,7 @@ class OrdersController < ApplicationController
   end
 
   def export
-    exporter = case params[:format]
-    when 'csv'
-      Exporters::CsvExporter.call
-    when 'pdf'
-      Exporters::PdfExporter.call
-    when 'html'
-      Exporters::HtmlExporter.call
-    when 'markdown'
-      Exporters::MarkdownExporter.call
-    when 'wookie'
-      Exporters::WookieExporter.call
-    end
+    exporter = Exporters::Factory.call(params[:format])
     Orders::ExportOrder.new(params[:id], exporter).call
     Orders::Notify.new(params[:id], params[:notify_by]).call
     head :ok
