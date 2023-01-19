@@ -1,11 +1,12 @@
 class ProductsController < ApplicationController
 
   def create
-    product_form = ProductForm.new(product_params)
-    if product_form.save
-      render json: product_form.product, status: :created
+    create_product = Products::Create.new(product_params)
+    product = create_product.call
+    if product.persisted?
+      render json: product, status: :created
     else
-      render json: product_form.errors, status: :unprocessable_entity
+      render json: product.errors, status: :unprocessable_entity
     end
   end
 
