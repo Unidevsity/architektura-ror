@@ -6,11 +6,32 @@ describe OrdersController do
     ]
   end
 
+  let(:orders_service) { OrdersService.new }
+
+  before do
+    allow(OrdersService).to receive(:new).and_return(orders_service)
+    allow(orders_service).to receive(:create_order).and_call_original
+    allow(orders_service).to receive(:update_order).and_call_original
+    allow(orders_service).to receive(:destroy_order).and_call_original
+    allow(orders_service).to receive(:add_product).and_call_original
+    allow(orders_service).to receive(:remove_product).and_call_original
+    allow(orders_service).to receive(:get_order).and_call_original
+  end
+
   describe 'POST #create' do
+    subject(:create_request) do
+      post :create, params: { order: { order_lines_attributes: order_lines } }
+
+    end
     it 'creates a new order' do
       expect do
-        post :create, params: { order: { order_lines_attributes: order_lines } }
+        create_request
       end.to change(Order, :count).by(1)
+    end
+
+    it 'calls OrdersService' do
+      expect(orders_service).to receive(:create_order).and_call_original
+      create_request
     end
   end
 
